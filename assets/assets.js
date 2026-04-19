@@ -78,23 +78,23 @@ export const assets = {
 
 export const workData = [
     {
-        title: 'Frontend project',
-        description: 'Web Design',
+        title: 'Funiro eCommerce',
+        description: 'Fullstack eCommerce Project',
         bgImage: '/work-1.png',
     },
     {
-        title: 'Geo based app',
-        description: 'Mobile App',
+        title: 'HoletStay',
+        description: 'Mern-stack project',
         bgImage: '/work-2.png',
     },
     {
-        title: 'Photography site',
-        description: 'Web Design',
+        title: 'chat-app',
+        description: 'Chating Application',
         bgImage: '/work-3.png',
     },
     {
-        title: 'UI/UX designing',
-        description: 'UI/UX Design',
+        title: 'flipearn',
+        description: 'Mern-stack project',
         bgImage: '/work-4.png',
     },
 ]
