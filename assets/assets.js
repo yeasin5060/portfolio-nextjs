@@ -100,10 +100,10 @@ export const workData = [
 ]
 
 export const serviceData = [
-    { icon: assets.web_icon, title: 'Web design', description: 'Web development is the process of building, programming...', link: '' },
-    { icon: assets.mobile_icon, title: 'Mobile app', description: 'Mobile app development involves creating software for mobile devices...', link: '' },
-    { icon: assets.ui_icon, title: 'UI/UX design', description: 'UI/UX design focuses on creating a seamless user experience...', link: '' },
-    { icon: assets.graphics_icon, title: 'Graphics design', description: 'Creative design solutions to enhance visual communication...', link: '' },
+    { icon: assets.web_icon, title: 'MERN-STACK Developer', description: 'MERN Stack Developer experienced in designing and developing end-to-end web applications. Proficient in MongoDB, Express.js, React.js, and Node.js, with a focus on clean code, performance optimization, and building scalable, user-friendly applications....', link: 'https://flipearns.netlify.app/' },
+    { icon: assets.mobile_icon, title: 'Font-end developer', description: 'I am a passionate Front-End Developer specializing in building dynamic and responsive web applications. I have hands-on experience with React.js, Tailwind CSS, and modern JavaScript, ensuring seamless user experience and visually appealing interfaces....', link: 'https://mern-stack-chat-apps.netlify.app/login' },
+    { icon: assets.ui_icon, title: 'UI/UX design', description: 'I am a creative UI/UX Designer with hands-on experience in designing user-centered digital products. I specialize in wireframing, prototyping, and user research to deliver seamless and engaging experiences that meet both user needs and business goals...', link: '' },
+    { icon: assets.graphics_icon, title: 'Back-end Developer', description: 'I am a Back-End Developer specializing in building robust and scalable server-side applications. I work with technologies like Node.js, Express, and databases to create secure APIs, handle data efficiently, and optimize application performance...', link: 'https://prismatic-zuccutto-5dbff9.netlify.app/' },
 ]
 
 export const infoList = [
