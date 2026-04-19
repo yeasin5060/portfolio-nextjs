@@ -1,11 +1,11 @@
 import { assets } from '@/assets/assets'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const Navbar = () => {
     const sideMenuRef = useRef();
-
+    const [isScroll , setIsScroll] = useState(false);
     const openMenu = () => {
         sideMenuRef.current.style.transform = 'translateX(-16rem)'
     }
@@ -13,12 +13,22 @@ const Navbar = () => {
     const closeMenu = () => {
         sideMenuRef.current.style.transform = 'translateX(16rem)'
     }
+
+    useEffect (()=>{
+        window.addEventListener('scroll' , ()=>{
+            if(scrollY > 50){
+                setIsScroll(true);
+            }else{
+                setIsScroll(false);
+            }
+        })
+    },[])
   return (
    <>
    <div className='fixed top-0 right-0 w-11/12 -z-10 translate-y-[-80%]'>
     <Image className='w-full' src={assets.header_bg_color} alt='not fount'/>
    </div>
-    <nav className='w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between'>
+    <nav className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50 ${isScroll ? "bg-white bg-opacity-50 backdrop-blur-lg shadow-sm" : ""}`}>
         <Link className='flex items-center justify' href='#top'>
             <Image alt='not fount' className='w-28 rounded-full cursor-pointer mr-14' src={assets.profile_img}/>
             <h2 className='text-2xl sm:text-4xl lg:text-[46px] fontOvo'>yeasin.dev</h2>

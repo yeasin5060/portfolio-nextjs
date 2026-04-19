@@ -5,7 +5,7 @@
 }
 
 .lightHover  {
-  color: #fcf4ff;
+  background-color: #cac4cc;
 }
 
 .darkHover  {
@@ -22,4 +22,12 @@
 
 .fontOvo {
   font-family: Ovo , serif;
+}
+
+.black {
+ text-shadow: 4px 4x 0 #000;
+}
+
+.white {
+   text-shadow: 4px 4x 0 #fff;
 }
