@@ -20,8 +20,8 @@ const Navbar = () => {
    </div>
     <nav className='w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between'>
         <Link className='flex items-center justify' href='#top'>
-            <Image alt='not fount' className='w-28 cursor-pointer mr-14' src={assets.logo}/>
-            <h2>yeasin.dev</h2>
+            <Image alt='not fount' className='w-28 rounded-full cursor-pointer mr-14' src={assets.profile_img}/>
+            <h2 className='text-2xl sm:text-4xl lg:text-[46px] fontOvo'>yeasin.dev</h2>
         </Link>
 
         <ul className='hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 bg-white shadow-sm bg-opacity-50'>
@@ -52,7 +52,7 @@ const Navbar = () => {
             </button>
         </div>
 
-        {/* ------------- Mobail menu ----------*/}
+        {/* ------------- Mobile menu ----------*/}
         <ul ref={sideMenuRef} className='flex md:hidden flex-col gap-4 px-20 py-10 fixed -right-64 top-0 bottom-0 w-64 z-50 h-screen bg-rose-50 transition duration-500'>
             <div className='absolute right-6 top-6' onClick={closeMenu}>
                 <Image className='w-6 cursor-pointer' src={assets.close_black} alt = 'not fount'/>
