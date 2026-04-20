@@ -31,7 +31,7 @@ const Navbar = () => {
     <nav className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50 ${isScroll ? "bg-white bg-opacity-50 backdrop-blur-lg shadow-sm" : ""}`}>
         <Link className='flex items-center justify' href='#top'>
             <Image alt='not fount' className='w-28 rounded-full cursor-pointer mr-14' src={assets.profile_img}/>
-            <h2 className='text-2xl sm:text-4xl lg:text-[46px] fontOvo'>yeasin.dev</h2>
+            <h2 className='text-[20px] sm:text-[20px] lg:text-[30px] fontOvo'>yeasin.dev</h2>
         </Link>
 
         <ul className='hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 bg-white shadow-sm bg-opacity-50'>
