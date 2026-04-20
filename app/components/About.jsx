@@ -38,21 +38,22 @@ const About = () => {
                 whileInView={{ opacity : 1}}
                 transition={{duration : 0.8 , delay : 0.6}}
                 className='flex-1'>
-                <p className='max-w-2xl mb-10 fontOvo'>I am an ecperienced MERN-Stack Developer with a decade of professional experties in the field.Throughout my career , I have had the privilege of collaborating with prestigious organizations, colloborating to thir success ang growth</p>
+                <p className='text-center max-w-2xl mb-10 fontOvo'>I am an ecperienced MERN-Stack Developer with a decade of professional experties in the field.Throughout my career , I have had the privilege of collaborating with prestigious organizations, colloborating to thir success ang growth</p>
 
                 <motion.ul 
                 initial = {{ opacity : 0}}
                 whileInView={{ opacity : 1}}
                 transition={{duration : 0.8 , delay : 0.1}}
-                className='grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl'>
+                className='grid grid-cols-1 sm:grid-cols-3 gap-30 max-w-3xl'>
                     {
-                        infoList.map(({icon, iconDark, title , description} , index)=>(
+                        infoList.map(({icon, title , description , backend} , index)=>(
                             <motion.li
                                 whileHover={{scale : 1.05}}
-                                className='border-[0.5px] border-gray-400 rounded-xl p-6 cursor-pointer hover:bg-[#cac4cc] hover:-translate-y-1 duration-500' key={index}>
+                                className='w-70 border-[0.5px] border-gray-400 rounded-xl p-6 cursor-pointer hover:bg-[#cac4cc] hover:-translate-y-1 duration-500' key={index}>
                                 <Image className='w-7 mt-3' src={icon} alt='not fount'/>
                                 <h3 className='my-4 font-semibold text-gray-700'>{title}</h3>
-                                <p className='text-gray-600 text-sm'>{description}</p>
+                                <p className='text-gray-600 text-sm w-50'>{description}</p>
+                                <p className='text-gray-600 text-sm w-50'>{backend}</p>
                             </motion.li>
                         ))
                     }

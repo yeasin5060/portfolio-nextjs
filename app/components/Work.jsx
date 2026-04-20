@@ -47,6 +47,9 @@ const Work = () => {
                                 <Image className='w-5' src={assets.send_icon} alt='not fount'/>
                             </div>
                         </div>
+                        <Link className='right-0 top-[-20px] absolute border border-gray-600 px-8 bg-gray-50 py-4 rounded-2xl flex items-center gap-2 text-sm mt-5' href={project.link}>
+                            Live Link <Image className='w-4' src={assets.right_arrow} alt='not fount'/>
+                        </Link>
                     </motion.div>
                 ))
             }
