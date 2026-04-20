@@ -53,7 +53,7 @@ const Navbar = () => {
         </ul>
         
         <div className='flex items-center gap-4'>
-            <button>
+            <button className='cursor-pointer'>
                 <Image className='w-6' src={assets.moon_icon} alt='not fount'/>
             </button>
             <Link className='hidden lg:flex items-center gap-3 px-10 py-2.5 border border-gray-500 rounded-full ml-4 fontOvo capitalize' href='#contact'>contact <Image className='w-3' alt='not fount' src={assets.arrow_icon}/></Link>
