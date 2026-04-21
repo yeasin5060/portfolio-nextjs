@@ -85,10 +85,10 @@ export const workData = [
         link : 'https://funiroecommerce.netlify.app/'
     },
     {
-        title: 'HoletStay',
-        description: 'Mern-stack project',
-        bgImage: '/work-2.png',
-        link: 'https://prismatic-zuccutto-5dbff9.netlify.app/'
+        title: 'Quick-Cart',
+        description: 'Next JS Full Stack Ecommerce ',
+        bgImage: '/work-5.png',
+        link: 'https://quick-cart-ecommerces.netlify.app/'
     },
     {
         title: 'chat-app',
