@@ -88,7 +88,7 @@ export const workData = [
         title: 'Quick-Cart',
         description: 'Next JS Full Stack Ecommerce ',
         bgImage: '/work-5.png',
-        link: 'https://quick-cart-ecommerces.netlify.app/'
+        link: 'https://flip-earn-henna.vercel.app/'
     },
     {
         title: 'chat-app',
@@ -100,7 +100,7 @@ export const workData = [
         title: 'flipearn',
         description: 'Mern-stack project',
         bgImage: '/work-4.png',
-        link: 'https://flipearns.netlify.app/'
+        link: 'https://flip-earn-henna.vercel.app/'
     },
 ]
 
