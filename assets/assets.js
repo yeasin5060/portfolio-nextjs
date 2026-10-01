@@ -18,7 +18,6 @@ import mail_icon_dark from './mail_icon_dark.png';
 import profile_img from './profile-img.png';
 import download_icon from './download-icon.png';
 import hand_icon from './hand-icon.png';
-import header_bg_color from './header-bg-color.png';
 import moon_icon from './moon_icon.png';
 import sun_icon from './sun_icon.png';
 import arrow_icon from './arrow-icon.png';
@@ -58,7 +57,6 @@ export const assets = {
     profile_img,
     download_icon,
     hand_icon,
-    header_bg_color,
     moon_icon,
     sun_icon,
     arrow_icon,
@@ -102,13 +100,31 @@ export const workData = [
         bgImage: '/work-4.png',
         link: 'https://flip-earn-henna.vercel.app/'
     },
+    {
+        title: 'Social Scheduler',
+        description: 'Plan and schedule social media content from one dashboard.',
+        bgImage: '/work-6.png',
+        link: 'https://social-scheduler-nu-amber.vercel.app/'
+    },
+    {
+        title: 'Job Portal',
+        description: 'A job search platform connecting candidates with new opportunities.',
+        bgImage: '/work-7.png',
+        link: 'https://job-portal-zeta-ten-79.vercel.app/'
+    },
+    {
+        title: 'Sikhai',
+        description: 'A learning platform designed to bring courses and learners together.',
+        bgImage: '/work-8.png',
+        link: 'https://sikhai-black.vercel.app/'
+    },
 ]
 
 export const serviceData = [
-    { icon: assets.web_icon, title: 'MERN-STACK Developer', description: 'MERN Stack Developer experienced in designing and developing end-to-end web applications. Proficient in MongoDB, Express.js, React.js, and Node.js, with a focus on clean code, performance optimization, and building scalable, user-friendly applications....',  link: ''},
-    { icon: assets.mobile_icon, title: 'Font-end developer', description: 'I am a passionate Front-End Developer specializing in building dynamic and responsive web applications. I have hands-on experience with React.js, Tailwind CSS, and modern JavaScript, ensuring seamless user experience and visually appealing interfaces....', link: '' },
-    { icon: assets.ui_icon, title: 'UI/UX design', description: 'I am a creative UI/UX Designer with hands-on experience in designing user-centered digital products. I specialize in wireframing, prototyping, and user research to deliver seamless and engaging experiences that meet both user needs and business goals...', link: '' },
-    { icon: assets.graphics_icon, title: 'Back-end Developer', description: 'I am a Back-End Developer specializing in building robust and scalable server-side applications. I work with technologies like Node.js, Express, and databases to create secure APIs, handle data efficiently, and optimize application performance...', link: '' },
+    { icon: assets.web_icon, title: 'Full-stack development', description: 'End-to-end web applications built with React, Next.js, Node.js, Express, and MongoDB.', link: '#contact' },
+    { icon: assets.mobile_icon, title: 'Frontend development', description: 'Responsive, accessible interfaces with clear interactions and reliable performance.', link: '#contact' },
+    { icon: assets.ui_icon, title: 'UI/UX design', description: 'Thoughtful page layouts and user flows shaped around real product needs.', link: '#contact' },
+    { icon: assets.graphics_icon, title: 'Backend development', description: 'Well-structured APIs, data models, and server-side features for web products.', link: '#contact' },
 ]
 
 export const infoList = [

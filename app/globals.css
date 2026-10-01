@@ -1,19 +1,67 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 *{
   font-family: Outfit;
 }
 
-.lightHover  {
-  background-color: #cac4cc;
+:root {
+  color-scheme: light;
+  --page-light: #f8fafc;
+  --page-dark: #080f1d;
 }
 
-.darkHover  {
-  color: #2a004a;
+html {
+  scroll-behavior: smooth;
 }
 
-.darkTheme  {
-  color: #11001F;
+body {
+  min-height: 100vh;
+  transition: background-color 300ms ease, color 300ms ease;
+  background-color: var(--page-light);
+  background-image: radial-gradient(ellipse at 10% 8%, rgb(14 165 233 / 7%), transparent 32%), radial-gradient(ellipse at 90% 30%, rgb(34 211 238 / 6%), transparent 30%);
+}
+
+html.dark body {
+  background-color: var(--page-dark);
+  background-image: radial-gradient(ellipse at 10% 8%, rgb(14 165 233 / 9%), transparent 32%), radial-gradient(ellipse at 90% 30%, rgb(34 211 238 / 7%), transparent 30%);
+}
+
+html.dark { color-scheme: dark; }
+
+.section-kicker {
+  color: #087e9c;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.dark .section-kicker { color: #67e8f9; }
+
+.section-heading {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+}
+
+.section-description { color: #64748b; font-size: 1rem; line-height: 1.75; }
+.dark .section-description { color: #cbd5e1; }
+
+::selection {
+  color: white;
+  background: #0891b2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .fontOutfit {
@@ -23,5 +71,3 @@
 .fontOvo {
   font-family: Ovo , serif;
 }
-
-
