@@ -2,7 +2,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 *{
-  font-family: Outfit;
+  font-family: Outfit, sans-serif;
+  box-sizing: border-box;
 }
 
 :root {
@@ -19,12 +20,18 @@ body {
   min-height: 100vh;
   transition: background-color 300ms ease, color 300ms ease;
   background-color: var(--page-light);
-  background-image: radial-gradient(ellipse at 10% 8%, rgb(14 165 233 / 7%), transparent 32%), radial-gradient(ellipse at 90% 30%, rgb(34 211 238 / 6%), transparent 30%);
+  background-image: 
+    radial-gradient(ellipse at 15% 10%, rgb(14 165 233 / 8%), transparent 36%), 
+    radial-gradient(ellipse at 85% 35%, rgb(34 211 238 / 7%), transparent 34%),
+    radial-gradient(ellipse at 50% 85%, rgb(99 102 241 / 5%), transparent 40%);
 }
 
 html.dark body {
   background-color: var(--page-dark);
-  background-image: radial-gradient(ellipse at 10% 8%, rgb(14 165 233 / 9%), transparent 32%), radial-gradient(ellipse at 90% 30%, rgb(34 211 238 / 7%), transparent 30%);
+  background-image: 
+    radial-gradient(ellipse at 15% 10%, rgb(14 165 233 / 11%), transparent 36%), 
+    radial-gradient(ellipse at 85% 35%, rgb(34 211 238 / 9%), transparent 34%),
+    radial-gradient(ellipse at 50% 85%, rgb(99 102 241 / 8%), transparent 40%);
 }
 
 html.dark { color-scheme: dark; }
@@ -41,18 +48,37 @@ html.dark { color-scheme: dark; }
 .dark .section-kicker { color: #67e8f9; }
 
 .section-heading {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 500;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.12;
 }
 
-.section-description { color: #64748b; font-size: 1rem; line-height: 1.75; }
+.section-description {
+  color: #64748b;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
 .dark .section-description { color: #cbd5e1; }
 
 ::selection {
   color: white;
   background: #0891b2;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 165, 233, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 165, 233, 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -65,9 +91,9 @@ html.dark { color-scheme: dark; }
 }
 
 .fontOutfit {
-  font-family: Outfit , sans-serif;
+  font-family: Outfit, sans-serif;
 }
 
 .fontOvo {
-  font-family: Ovo , serif;
+  font-family: Ovo, serif;
 }

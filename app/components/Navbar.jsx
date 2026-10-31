@@ -36,7 +36,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
+            if (window.scrollY > 40) {
                 setIsScroll(true);
             } else {
                 setIsScroll(false);
@@ -48,32 +48,38 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50 transition-colors text-gray-900 dark:text-white ${isScroll ? 'bg-white/80 dark:bg-[#11001F]/80 backdrop-blur-lg shadow-sm' : ''}`}>
-                <Link className='flex items-center' href='#top' aria-label='Yeasin Munshi home'>
-                    <span className='text-xl sm:text-2xl font-semibold tracking-tight'>yeasin<span className='text-cyan-500'>.</span>dev</span>
+            <nav className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50 transition-all duration-300 text-gray-900 dark:text-white ${isScroll ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-lg border-b border-sky-100/50 dark:border-white/5 py-3' : 'bg-transparent'}`}>
+                <Link className='flex items-center group' href='#top' aria-label='Yeasin Munshi home'>
+                    <span className='text-xl sm:text-2xl font-bold tracking-tight'>
+                        yeasin<span className='text-cyan-500 group-hover:text-cyan-400 transition-colors'>.</span>dev
+                    </span>
                 </Link>
 
-                <ul className='hidden lg:flex items-center gap-5 xl:gap-8 rounded-full px-8 xl:px-12 py-3 shadow-sm backdrop-blur-md bg-white/80 dark:bg-[#17253b]/90'>
+                <ul className='hidden lg:flex items-center gap-6 xl:gap-8 rounded-full px-8 xl:px-10 py-2.5 shadow-sm backdrop-blur-md bg-white/70 dark:bg-slate-900/80 border border-sky-200/60 dark:border-white/10 text-sm font-medium'>
                     <li>
-                        <Link className='fontOvo capitalize' href='#top'>home</Link>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#top'>Home</Link>
                     </li>
                     <li>
-                        <Link className='fontOvo' href='#about'>About me</Link>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#about'>About</Link>
                     </li>
                     <li>
-                        <Link className='fontOvo capitalize' href='#services'>services</Link>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#skills'>Tech Orbit</Link>
                     </li>
                     <li>
-                        <Link className='fontOvo capitalize' href='#work'>my work</Link>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#services'>Services</Link>
                     </li>
                     <li>
-                        <Link className='fontOvo' href='#contact'>Contact me</Link>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#work'>Projects</Link>
+                    </li>
+                    <li>
+                        <Link className='hover:text-cyan-500 transition-colors' href='#contact'>Contact</Link>
                     </li>
                 </ul>
 
-                <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-3'>
+                    {/* Theme Toggle */}
                     <button
-                        className='rounded-full p-2 cursor-pointer transition-colors hover:bg-cyan-400/10'
+                        className='rounded-full p-2.5 cursor-pointer transition-colors hover:bg-cyan-400/10 border border-transparent hover:border-cyan-400/20'
                         onClick={toggleTheme}
                         aria-label='Toggle light and dark mode'
                         title='Toggle theme'
@@ -93,16 +99,21 @@ const Navbar = () => {
                             <div className='w-5 h-5' />
                         )}
                     </button>
+
+                    {/* Contact CTA */}
                     <Link
-                        className='hidden lg:flex items-center gap-3 px-7 py-2.5 border rounded-full ml-4 fontOvo capitalize transition-all hover:-translate-y-0.5 border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-cyan-300/50 dark:bg-cyan-400/10 dark:hover:bg-cyan-400/20'
+                        className='hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 border border-sky-300 dark:border-cyan-500/30 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-md shadow-cyan-500/20'
                         href='#contact'
                     >
-                        contact
-                        <Image className='w-3 dark:hidden' alt='contact' src={assets.arrow_icon} />
-                        <Image className='w-3 hidden dark:block' alt='contact' src={assets.arrow_icon_dark} />
+                        <span>Let's Talk</span>
+                        <svg viewBox='0 0 24 24' className='w-3.5 h-3.5' fill='none' stroke='currentColor' strokeWidth='2.2' strokeLinecap='round'>
+                            <path d='M5 12h14M12 5l7 7-7 7'/>
+                        </svg>
                     </Link>
+
+                    {/* Mobile Hamburger Button */}
                     <button
-                        className='block lg:hidden ml-3 rounded-full p-2 hover:bg-cyan-400/10 transition-colors'
+                        className='block lg:hidden ml-1 rounded-full p-2 hover:bg-cyan-400/10 transition-colors'
                         onClick={isMenuOpen ? closeMenu : openMenu}
                         aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
                         aria-expanded={isMenuOpen}
@@ -121,30 +132,34 @@ const Navbar = () => {
                     </button>
                 </div>
 
+                {/* Mobile Menu Backdrop */}
                 {isMenuOpen && (
                     <button
                         aria-label='Close navigation menu'
                         onClick={closeMenu}
-                        className='fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm lg:hidden'
+                        className='fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm lg:hidden'
                     />
                 )}
+
+                {/* Mobile Slide-in Drawer */}
                 <ul
                     id='mobile-navigation'
-                    className={`flex lg:hidden flex-col gap-6 px-8 py-16 fixed right-0 top-0 bottom-0 w-[min(20rem,85vw)] z-50 h-dvh shadow-2xl transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} bg-sky-50 text-gray-900 dark:bg-[#101c30] dark:text-white`}
+                    className={`flex lg:hidden flex-col gap-6 px-8 py-16 fixed right-0 top-0 bottom-0 w-[min(20rem,85vw)] z-50 h-dvh shadow-2xl transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} bg-white dark:bg-slate-950 text-gray-900 dark:text-white border-l border-sky-100 dark:border-white/10`}
                     aria-hidden={!isMenuOpen}
                     inert={!isMenuOpen}
                 >
-                    <li><Link className='fontOvo capitalize' href='#top' onClick={closeMenu}>Home</Link></li>
-                    <li><Link className='fontOvo' href='#about' onClick={closeMenu}>About me</Link></li>
-                    <li><Link className='fontOvo capitalize' href='#services' onClick={closeMenu}>Services</Link></li>
-                    <li><Link className='fontOvo capitalize' href='#work' onClick={closeMenu}>My work</Link></li>
-                    <li><Link className='fontOvo' href='#contact' onClick={closeMenu}>Contact me</Link></li>
-                    <li className='mt-3 border-t border-current/15 pt-5'>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#top' onClick={closeMenu}>Home</Link></li>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#about' onClick={closeMenu}>About</Link></li>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#skills' onClick={closeMenu}>Tech Orbit</Link></li>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#services' onClick={closeMenu}>Services</Link></li>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#work' onClick={closeMenu}>Projects</Link></li>
+                    <li><Link className='text-lg font-medium hover:text-cyan-500' href='#contact' onClick={closeMenu}>Contact</Link></li>
+                    <li className='mt-4 border-t border-current/10 pt-6'>
                         <button
                             onClick={() => { toggleTheme(); closeMenu(); }}
-                            className='text-sm text-cyan-600 dark:text-cyan-300 font-medium'
+                            className='text-sm text-cyan-600 dark:text-cyan-400 font-semibold'
                         >
-                            {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                            {isDark ? 'Switch to Light Mode ☀️' : 'Switch to Dark Mode 🌙'}
                         </button>
                     </li>
                 </ul>
