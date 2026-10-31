@@ -8,17 +8,62 @@ import { motion, AnimatePresence } from 'motion/react'
 /**
  * Work (Projects Section) - Premium 3D Tilt Card Showcase with Interactive Filter
  * Features:
- * - Real verified projects from Yeasin's portfolio
- * - Category filter tabs (All, Full Stack, Next.js, Real-Time)
+ * - Real verified projects from Yeasin's portfolio with new featured projects
+ * - Category filter tabs (All, Full Stack, Next.js, Real-Time, Games)
  * - 3D card mouse tilt & image zoom
  * - Technology stack pill badges
  * - Direct Live Demo & GitHub repository links
  */
-const Work = () => {
-  const [activeFilter, setActiveFilter] = useState('All')
-
-  // Real projects verified from Yeasin's portfolio
+// Projects list: 4 new projects placed at the beginning as requested
   const projects = [
+    {
+      id: 'nokshiwala',
+      title: 'Nokshiwala',
+      category: 'Full Stack',
+      tag: 'Artisan eCommerce',
+      description: 'An artisan lifestyle eCommerce marketplace for handcrafted cultural designs, featuring dynamic catalog discovery, cart management, and seamless order flow.',
+      bgImage: '/nokshiwala.svg',
+      link: 'https://nokshiwala.vercel.app/',
+      github: 'https://github.com/yeasin5060/nokshiwala',
+      tech: ['React.js', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
+      featured: true
+    },
+    {
+      id: 'gocart',
+      title: 'GoCart',
+      category: 'Next.js',
+      tag: 'High-Speed Store',
+      description: 'High-performance modern shopping cart and full-scale eCommerce solution with sub-second SSR, instant product discovery, and optimized checkout.',
+      bgImage: '/gocart.svg',
+      link: 'https://gocart-amber-chi.vercel.app/',
+      github: 'https://github.com/yeasin5060/gocart',
+      tech: ['Next.js', 'React 19', 'MongoDB', 'Node.js', 'Tailwind CSS'],
+      featured: true
+    },
+    {
+      id: 'office-erp',
+      title: 'Office ERP System',
+      category: 'Full Stack',
+      tag: 'Enterprise ERP',
+      description: 'Comprehensive enterprise resource management platform for office administration, employee attendance, departmental task allocation, and payroll tracking.',
+      bgImage: '/office-erp.svg',
+      link: 'https://github.com/yeasin5060/office-erp-system',
+      github: 'https://github.com/yeasin5060/office-erp-system',
+      tech: ['MERN Stack', 'React.js', 'Node.js', 'Express', 'MongoDB', 'JWT Auth'],
+      featured: true
+    },
+    {
+      id: 'shadow-runner',
+      title: 'Shadow-Runner-Game',
+      category: 'Games',
+      tag: 'Interactive 2D Game',
+      description: 'Fast-paced 2D endless runner arcade game engineered with HTML5 Canvas and JavaScript physics, featuring collision detection, dynamic obstacle spawning, and audio effects.',
+      bgImage: '/shadow-runner.svg',
+      link: 'https://shadow-runner-game-theta.vercel.app/',
+      github: 'https://github.com/yeasin5060/Shadow-Runner-Game',
+      tech: ['JavaScript (ES6+)', 'HTML5 Canvas', 'CSS3', 'Game Physics', 'Web Audio'],
+      featured: true
+    },
     {
       id: 'funiro',
       title: 'Funiro eCommerce',
@@ -105,7 +150,10 @@ const Work = () => {
     }
   ]
 
-  const categories = ['All', 'Full Stack', 'Next.js', 'Real-Time']
+const categories = ['All', 'Full Stack', 'Next.js', 'Real-Time', 'Games']
+
+const Work = () => {
+  const [activeFilter, setActiveFilter] = useState('All')
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'All') return projects
@@ -146,7 +194,7 @@ const Work = () => {
           transition={{ delay: 0.2 }}
           className='section-description max-w-2xl mx-auto mt-4'
         >
-          A curated selection of production-grade full-stack web applications, featuring real-time sockets, secure auth, robust database schemas, and modern responsive UI.
+          A curated selection of production-grade web applications and interactive systems, featuring eCommerce marketplaces, enterprise ERPs, 2D canvas games, real-time sockets, and modern responsive UI.
         </motion.p>
 
         {/* Filter Pills */}
@@ -193,7 +241,7 @@ const Work = () => {
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                   className='object-cover object-top group-hover:scale-108 transition-transform duration-500'
                 />
-                <div className='absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity' />
+                <div className='absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-75 group-hover:opacity-55 transition-opacity' />
 
                 {/* Category & Tag Badge */}
                 <div className='absolute top-3.5 left-3.5 flex items-center gap-2'>

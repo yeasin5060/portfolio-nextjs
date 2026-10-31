@@ -3,23 +3,38 @@
 import { assets } from '@/assets/assets'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useSyncExternalStore } from 'react'
+
+const subscribeTheme = (callback) => {
+    if (typeof window === 'undefined') return () => {};
+    window.addEventListener('storage', callback);
+    const observer = new MutationObserver(callback);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => {
+        window.removeEventListener('storage', callback);
+        observer.disconnect();
+    };
+};
+
+const getThemeSnapshot = () => {
+    if (typeof document === 'undefined') return false;
+    return document.documentElement.classList.contains('dark');
+};
+
+const getThemeServerSnapshot = () => false;
+
+const emptySubscribe = () => () => {};
+const getMountedSnapshot = () => true;
+const getMountedServerSnapshot = () => false;
 
 const Navbar = () => {
     const [isScroll, setIsScroll] = useState(false);
-    const [isDark, setIsDark] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        const isCurrentDark = document.documentElement.classList.contains('dark');
-        setIsDark(isCurrentDark);
-    }, []);
+    const isDark = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getThemeServerSnapshot);
+    const mounted = useSyncExternalStore(emptySubscribe, getMountedSnapshot, getMountedServerSnapshot);
 
     const toggleTheme = () => {
         const nextIsDark = !document.documentElement.classList.contains('dark');
-        setIsDark(nextIsDark);
         document.documentElement.classList.toggle('dark', nextIsDark);
         try {
             localStorage.setItem('theme', nextIsDark ? 'dark' : 'light');
@@ -48,7 +63,13 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50 transition-all duration-300 text-gray-900 dark:text-white ${isScroll ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-lg border-b border-sky-100/50 dark:border-white/5 py-3' : 'bg-transparent'}`}>
+            <nav
+                className={`w-full fixed px-5 lg:px-8 xl:px-[8%] flex items-center justify-between z-50 transition-all duration-300 text-gray-900 dark:text-white ${
+                    isScroll
+                        ? 'py-3.5 bg-white/75 dark:bg-slate-950/75 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.4)]'
+                        : 'py-5 bg-transparent'
+                }`}
+            >
                 <Link className='flex items-center group' href='#top' aria-label='Yeasin Munshi home'>
                     <span className='text-xl sm:text-2xl font-bold tracking-tight'>
                         yeasin<span className='text-cyan-500 group-hover:text-cyan-400 transition-colors'>.</span>dev
@@ -105,7 +126,7 @@ const Navbar = () => {
                         className='hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all hover:-translate-y-0.5 border border-sky-300 dark:border-cyan-500/30 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-md shadow-cyan-500/20'
                         href='#contact'
                     >
-                        <span>Let's Talk</span>
+                        <span>Let&apos;s Talk</span>
                         <svg viewBox='0 0 24 24' className='w-3.5 h-3.5' fill='none' stroke='currentColor' strokeWidth='2.2' strokeLinecap='round'>
                             <path d='M5 12h14M12 5l7 7-7 7'/>
                         </svg>

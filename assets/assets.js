@@ -77,10 +77,34 @@ export const assets = {
 
 export const workData = [
     {
+        title: 'Nokshiwala',
+        description: 'Handcrafted Lifestyle & Artisan Marketplace',
+        bgImage: '/nokshiwala.svg',
+        link: 'https://nokshiwala.vercel.app/'
+    },
+    {
+        title: 'GoCart',
+        description: 'Next.js High-Performance eCommerce & Cart Engine',
+        bgImage: '/gocart.svg',
+        link: 'https://gocart-amber-chi.vercel.app/'
+    },
+    {
+        title: 'Office ERP System',
+        description: 'Enterprise Office Workflow, Attendance & Resource Hub',
+        bgImage: '/office-erp.svg',
+        link: 'https://github.com/yeasin5060/office-erp-system'
+    },
+    {
+        title: 'Shadow-Runner-Game',
+        description: 'Interactive 2D Endless Runner with Physics Engine',
+        bgImage: '/shadow-runner.svg',
+        link: 'https://shadow-runner-game-theta.vercel.app/'
+    },
+    {
         title: 'Funiro eCommerce',
         description: 'Fullstack eCommerce Project',
         bgImage: '/work-1.png',
-        link : 'https://funiroecommerce.netlify.app/'
+        link: 'https://funiroecommerce.netlify.app/'
     },
     {
         title: 'Quick-Cart',
@@ -118,14 +142,14 @@ export const workData = [
         bgImage: '/work-8.png',
         link: 'https://sikhai-black.vercel.app/'
     },
-]
+];
 
 export const serviceData = [
     { icon: assets.web_icon, title: 'Full-stack development', description: 'End-to-end web applications built with React, Next.js, Node.js, Express, and MongoDB.', link: '#contact' },
     { icon: assets.mobile_icon, title: 'Frontend development', description: 'Responsive, accessible interfaces with clear interactions and reliable performance.', link: '#contact' },
     { icon: assets.ui_icon, title: 'UI/UX design', description: 'Thoughtful page layouts and user flows shaped around real product needs.', link: '#contact' },
     { icon: assets.graphics_icon, title: 'Backend development', description: 'Well-structured APIs, data models, and server-side features for web products.', link: '#contact' },
-]
+];
 
 export const infoList = [
     { icon: assets.code_icon, iconDark: assets.code_icon_dark, title: 'Front-end Developer', description: 'HTML, CSS, SCSS, BEM, Bootstrap, Tailwind CSS, JavaScript, React JS, Next JS, ReduxToolkit, Context API, MetarialUi,Clerk,Socket.IO,Prebuiltui' },

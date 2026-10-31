@@ -68,7 +68,7 @@ const Header = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className='text-base sm:text-lg font-medium text-cyan-600 dark:text-cyan-400 tracking-wide mb-1'
           >
-            Hello World, I'm
+            Hello World, I&apos;m
           </motion.p>
           <motion.h1
             initial={{ y: -20, opacity: 0 }}
@@ -122,8 +122,9 @@ const Header = () => {
 
           {/* Download Resume Button */}
           <a
-            href='/yeasin munshi mern stack Developer resume new.pdf'
-            download
+            href='https://drive.google.com/file/d/1HEGBrN0trJYoi6NU7m3reJeZJbfZ2K8R/view?usp=sharing'
+            target='_blank'
+            rel='noopener noreferrer'
             className='px-7 py-3.5 border border-sky-300 dark:border-white/15 hover:border-cyan-400 bg-white/70 dark:bg-slate-900/60 hover:bg-sky-50 dark:hover:bg-slate-800 text-gray-900 dark:text-white font-medium rounded-full flex items-center gap-2.5 backdrop-blur-md shadow-sm transition-all text-sm sm:text-base hover:-translate-y-0.5'
           >
             <Image className='w-4 h-4' src={assets.download_icon} alt='' />
@@ -203,11 +204,7 @@ const Header = () => {
         </motion.div>
 
         {/* The Interactive Elastic Avatar Canvas */}
-        <ElasticAvatar
-          imageSrc={assets.profile_img}
-          size={370}
-          circleSize={265}
-        />
+        <ElasticAvatar size={400} />
       </motion.div>
     </section>
   )

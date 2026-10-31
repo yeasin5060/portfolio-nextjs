@@ -11,7 +11,7 @@ import { motion } from 'motion/react'
 const About = () => {
   const verifiedStats = [
     { label: 'Hands-on Experience', value: '2+', suffix: 'Years', desc: 'Building full-stack MERN & Next.js web applications' },
-    { label: 'Completed Projects', value: '7+', suffix: 'Apps', desc: 'From real-time chats to full eCommerce platforms' },
+    { label: 'Completed Projects', value: '11+', suffix: 'Apps', desc: 'From real-time chats to eCommerce & enterprise ERPs' },
     { label: 'Tech Stack & Tools', value: '20+', suffix: 'Tools', desc: 'Proficient in modern frontend, backend & dev tools' },
     { label: 'Code Quality', value: '100%', suffix: '', desc: 'Commitment to clean architecture & accessibility' },
   ]

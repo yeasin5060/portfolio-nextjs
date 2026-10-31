@@ -1,37 +1,34 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { techStack, techStackCategories } from '../data/techStackData'
 
 /**
- * TechStack3D - Awwwards-inspired 3D Interactive Sphere & Orbital Tech Showcase
- * Uses pure 3D mathematics and perspective projection on requestAnimationFrame.
+ * TechStack3D - Ultra-Smooth 60/120FPS 3D Tech Orbit Sphere
+ * Optimized with Direct DOM Ref Updates (Zero React Re-render Lag on Animation Loop)
  * Features:
- * - Fibonacci sphere distribution for uniform 3D spacing
- * - Interactive momentum drag & automatic orbital rotation
- * - Category filtering (Frontend, Backend, Database, Tools)
- * - Deep interactive inspection cards with official SVG icons
- * - High-DPI canvas & responsive touch handling
+ * - Direct GPU-accelerated translate3d compositing (bypasses React state overhead)
+ * - True momentum physics with exponential inertia decay (friction = 0.92)
+ * - Pointer capture handling for flawless mouse/touch dragging without jitter
+ * - Intelligent hover slowdown for effortless micro-inspection
+ * - Category filtering (All, Frontend, Backend, Database, Tools)
+ * - Interactive Tech Spotlight Card & Responsive Grid Fallback
  */
 const TechStack3D = () => {
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [activeTech, setActiveTech] = useState(techStack[0])
+  const [selectedTechName, setSelectedTechName] = useState(techStack[0].name)
   const [isDragging, setIsDragging] = useState(false)
   const [viewMode, setViewMode] = useState('sphere') // 'sphere' | 'grid'
 
   const containerRef = useRef(null)
-  const sphereRef = useRef({
-    rotX: 0.15,
-    rotY: 0.2,
-    velX: 0.003,
-    velY: 0.004,
-    lastMouseX: 0,
-    lastMouseY: 0,
-    isInteracting: false,
-    radius: 200,
-    animId: null
-  })
+  const nodeRefs = useRef([])
+  const isDraggingRef = useRef(false)
+  const isHoveredRef = useRef(false)
+  const lastPosRef = useRef({ x: 0, y: 0 })
+  const velRef = useRef({ x: 0.001, y: 0.0025 })
+  const rotRef = useRef({ x: 0.15, y: 0.2 })
+  const animFrameRef = useRef(null)
 
   // Filtered tech items
   const filteredTech = useMemo(() => {
@@ -39,57 +36,74 @@ const TechStack3D = () => {
     return techStack.filter(item => item.category === selectedCategory)
   }, [selectedCategory])
 
+  // Declarative active tech resolution (No setState inside useEffect)
+  const activeTech = useMemo(() => {
+    const found = filteredTech.find(t => t.name === selectedTechName)
+    return found || filteredTech[0] || techStack[0]
+  }, [filteredTech, selectedTechName])
+
   // Distribute items uniformly on a sphere using the Fibonacci lattice
   const sphereNodes = useMemo(() => {
     const total = filteredTech.length
     const goldenRatio = (1 + Math.sqrt(5)) / 2
 
     return filteredTech.map((tech, i) => {
-      // theta: azimuthal angle, phi: polar angle
-      const theta = 2 * Math.PI * i / goldenRatio
-      const phi = Math.acos(1 - 2 * (i + 0.5) / total)
+      const theta = (2 * Math.PI * i) / goldenRatio
+      const phi = Math.acos(1 - (2 * (i + 0.5)) / total)
 
       return {
         ...tech,
-        // Normalized base coordinates on unit sphere
         bx: Math.sin(phi) * Math.cos(theta),
         by: Math.cos(phi),
         bz: Math.sin(phi) * Math.sin(theta),
-        // Projected 3D coordinates
-        x: 0,
-        y: 0,
-        z: 0,
-        scale: 1,
-        alpha: 1
       }
     })
   }, [filteredTech])
 
-  const [projectedNodes, setProjectedNodes] = useState(sphereNodes)
-
-  // 3D Rotation & Projection loop
+  // High-Performance 3D Projection Loop (Direct DOM Updates - Zero React Re-rendering lag)
   useEffect(() => {
-    const s = sphereRef.current
-    let mounted = true
+    if (viewMode !== 'sphere') return
 
-    const updateProjection = () => {
-      if (!mounted) return
+    let isRunning = true
 
-      // Apply automatic slow rotation when not dragging
-      if (!s.isInteracting) {
-        s.rotY += s.velY
-        s.rotX += s.velX
+    const update3DPositions = () => {
+      if (!isRunning) return
+
+      const rot = rotRef.current
+      const vel = velRef.current
+      const container = containerRef.current
+
+      // Calculate responsive radius based on container width
+      const width = container ? container.clientWidth : 500
+      const radius = width < 500 ? 140 : width < 768 ? 175 : 210
+      const focalLength = 380
+
+      // Physics momentum update
+      if (!isDraggingRef.current) {
+        // Integrate angular velocity
+        rot.y += vel.y
+        rot.x += vel.x
+
+        // Smoothly damp velocity back into ambient orbital drift
+        const targetIdleY = isHoveredRef.current ? 0.0006 : 0.0025
+        const targetIdleX = isHoveredRef.current ? 0.0003 : 0.001
+
+        vel.y = vel.y * 0.92 + targetIdleY * 0.08
+        vel.x = vel.x * 0.92 + targetIdleX * 0.08
       }
 
-      const cosX = Math.cos(s.rotX)
-      const sinX = Math.sin(s.rotX)
-      const cosY = Math.cos(s.rotY)
-      const sinY = Math.sin(s.rotY)
+      const cosX = Math.cos(rot.x)
+      const sinX = Math.sin(rot.x)
+      const cosY = Math.cos(rot.y)
+      const sinY = Math.sin(rot.y)
 
-      const focalLength = 360
-      const radius = s.radius
+      // Direct element updates
+      const totalNodes = sphereNodes.length
+      for (let i = 0; i < totalNodes; i++) {
+        const node = sphereNodes[i]
+        const el = nodeRefs.current[i]
+        if (!el) continue
 
-      const updated = sphereNodes.map(node => {
         // Rotate around Y-axis
         const x1 = node.bx * cosY + node.bz * sinY
         const z1 = -node.bx * sinY + node.bz * cosY
@@ -99,90 +113,80 @@ const TechStack3D = () => {
         const z2 = node.by * sinX + z1 * cosX
         const x2 = x1
 
-        // Scale by radius
+        // World coordinates scaled by radius
         const worldX = x2 * radius
         const worldY = y2 * radius
         const worldZ = z2 * radius
 
-        // Perspective projection
+        // Perspective depth calculation
         const depth = focalLength / (focalLength + worldZ)
-        const scale = Math.max(0.45, Math.min(1.4, depth))
-        const alpha = Math.max(0.2, (worldZ + radius) / (2 * radius) * 0.8 + 0.2)
+        const scale = Math.max(0.55, Math.min(1.28, depth * 0.95))
+        const alpha = Math.max(0.2, Math.min(1, (worldZ + radius) / (2 * radius) * 0.78 + 0.22))
+        const zIndex = Math.round(worldZ + 400)
 
-        return {
-          ...node,
-          x: worldX * depth,
-          y: worldY * depth,
-          z: worldZ,
-          scale,
-          alpha
-        }
-      })
+        const px = worldX * depth
+        const py = worldY * depth
 
-      // Sort by depth (Z) so closer nodes render in front
-      updated.sort((a, b) => a.z - b.z)
-      setProjectedNodes(updated)
+        // Directly mutate GPU transform & opacity (never causes React render lag)
+        el.style.transform = `translate3d(${px}px, ${py}px, 0px) scale(${scale})`
+        el.style.zIndex = zIndex
+        el.style.opacity = alpha
+      }
 
-      s.animId = requestAnimationFrame(updateProjection)
+      animFrameRef.current = requestAnimationFrame(update3DPositions)
     }
 
-    s.animId = requestAnimationFrame(updateProjection)
+    animFrameRef.current = requestAnimationFrame(update3DPositions)
 
     return () => {
-      mounted = false
-      if (s.animId) cancelAnimationFrame(s.animId)
+      isRunning = false
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current)
+      }
     }
-  }, [sphereNodes])
+  }, [sphereNodes, viewMode])
 
-  // Mouse / Touch rotation control
+  // Mouse & Touch Pointer Handlers with PointerCapture for ultra-smooth drag
   const handlePointerDown = (e) => {
-    const s = sphereRef.current
-    s.isInteracting = true
+    if (e.button !== undefined && e.button !== 0) return
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } catch (_) {}
+
+    isDraggingRef.current = true
     setIsDragging(true)
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY
-    s.lastMouseX = clientX
-    s.lastMouseY = clientY
+    lastPosRef.current = { x: e.clientX, y: e.clientY }
+    velRef.current = { x: 0, y: 0 }
   }
 
-  const handlePointerMove = useCallback((e) => {
-    const s = sphereRef.current
-    if (!s.isInteracting) return
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY
+    const dx = e.clientX - lastPosRef.current.x
+    const dy = e.clientY - lastPosRef.current.y
+    lastPosRef.current = { x: e.clientX, y: e.clientY }
 
-    const dx = clientX - s.lastMouseX
-    const dy = clientY - s.lastMouseY
+    // Direct responsive angle modification
+    rotRef.current.y += dx * 0.005
+    rotRef.current.x -= dy * 0.005
 
-    s.rotY += dx * 0.007
-    s.rotX -= dy * 0.007
+    // Track smooth velocity
+    velRef.current.y = dx * 0.0028
+    velRef.current.x = -dy * 0.0028
+  }
 
-    s.velY = dx * 0.001
-    s.velX = -dy * 0.001
-
-    s.lastMouseX = clientX
-    s.lastMouseY = clientY
-  }, [])
-
-  const handlePointerUp = useCallback(() => {
-    const s = sphereRef.current
-    s.isInteracting = false
+  const handlePointerUp = (e) => {
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
     setIsDragging(false)
-    // Dampen velocity to smooth idle rotation
-    s.velY = Math.sign(s.velY) * Math.min(Math.abs(s.velY), 0.006)
-    s.velX = Math.sign(s.velX) * Math.min(Math.abs(s.velX), 0.004)
-    if (Math.abs(s.velY) < 0.001) s.velY = 0.003
-  }, [])
 
-  useEffect(() => {
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove)
-      window.removeEventListener('pointerup', handlePointerUp)
-    }
-  }, [handlePointerMove, handlePointerUp])
+    try {
+      if (e.currentTarget?.hasPointerCapture?.(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch (_) {}
+  }
 
   return (
     <section id='skills' className='w-full px-5 sm:px-8 lg:px-[8%] xl:px-[12%] py-20 sm:py-28 relative isolate overflow-hidden'>
@@ -275,7 +279,16 @@ const TechStack3D = () => {
           <div
             ref={containerRef}
             onPointerDown={handlePointerDown}
-            className={`lg:col-span-8 relative h-[440px] sm:h-[500px] flex items-center justify-center select-none rounded-3xl border border-sky-200/60 dark:border-cyan-500/15 bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl shadow-2xl overflow-hidden ${
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onMouseEnter={() => {
+              isHoveredRef.current = true
+            }}
+            onMouseLeave={() => {
+              isHoveredRef.current = false
+            }}
+            className={`lg:col-span-8 relative h-[440px] sm:h-[500px] flex items-center justify-center select-none rounded-3xl border border-sky-200/60 dark:border-cyan-500/15 bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl shadow-2xl overflow-hidden touch-none ${
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           >
@@ -291,34 +304,37 @@ const TechStack3D = () => {
               <span>🖱️ Drag to rotate sphere &bull; Click to inspect</span>
             </div>
 
-            {/* 3D Projected Icons */}
+            {/* 3D Projected Icons Container */}
             <div className='relative w-full h-full flex items-center justify-center pointer-events-none'>
-              {projectedNodes.map((tech) => {
+              {sphereNodes.map((tech, index) => {
                 const isSelected = activeTech?.name === tech.name
                 return (
                   <div
                     key={tech.name}
-                    onClick={() => setActiveTech(tech)}
+                    ref={(el) => {
+                      nodeRefs.current[index] = el
+                    }}
+                    onClick={() => setSelectedTechName(tech.name)}
                     className='pointer-events-auto absolute flex flex-col items-center justify-center group'
                     style={{
-                      transform: `translate3d(${tech.x}px, ${tech.y}px, 0px) scale(${tech.scale})`,
-                      zIndex: Math.round(tech.z + 300),
-                      opacity: tech.alpha,
-                      transition: isDragging ? 'none' : 'transform 0.05s linear',
+                      willChange: 'transform, opacity',
+                      transform: 'translate3d(0, 0, 0) scale(1)',
+                      backfaceVisibility: 'hidden',
+                      transition: 'none',
                     }}
                   >
                     {/* Icon Card */}
                     <div
-                      className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-2.5 flex items-center justify-center backdrop-blur-md border transition-all duration-300 cursor-pointer ${
+                      className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-2.5 flex items-center justify-center backdrop-blur-md border transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? 'border-cyan-400 ring-2 ring-cyan-400/80 shadow-[0_0_24px_rgba(6,182,212,0.6)] bg-slate-900/90 scale-125'
-                          : 'border-sky-300/40 dark:border-white/10 bg-white/90 dark:bg-slate-900/80 hover:border-cyan-400 hover:scale-115 shadow-lg'
+                          ? 'border-cyan-400 ring-2 ring-cyan-400/80 shadow-[0_0_24px_rgba(6,182,212,0.6)] bg-slate-900/95 scale-125'
+                          : 'border-sky-300/40 dark:border-white/10 bg-white/90 dark:bg-slate-900/85 hover:border-cyan-400 hover:scale-115 shadow-md hover:shadow-cyan-500/20'
                       }`}
                       style={{
                         boxShadow: isSelected ? `0 0 25px ${tech.color}40` : undefined,
                       }}
                       onMouseEnter={() => {
-                        if (!isDragging) setActiveTech(tech)
+                        if (!isDraggingRef.current) setSelectedTechName(tech.name)
                       }}
                     >
                       <div className='w-full h-full flex items-center justify-center'>

@@ -81,7 +81,7 @@ const Contact = () => {
           transition={{ delay: 0.1 }}
           className='section-heading'
         >
-          Let's Build Something Exceptional
+          Let&apos;s Build Something Exceptional
         </motion.h2>
 
         <motion.p
@@ -91,7 +91,7 @@ const Contact = () => {
           transition={{ delay: 0.2 }}
           className='section-description max-w-2xl mx-auto mt-4'
         >
-          Whether you're looking for a full-stack engineer for your team, have an exciting freelance project, or just want to chat tech—my inbox is always open.
+          Whether you&apos;re looking for a full-stack engineer for your team, have an exciting freelance project, or just want to chat tech—my inbox is always open.
         </motion.p>
       </div>
 
