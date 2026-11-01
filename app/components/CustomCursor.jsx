@@ -21,11 +21,16 @@ const CustomCursor = () => {
 
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
-      if (!isVisible) setIsVisible(true)
 
-      // Check if hovering interactive element
+      // Check if hovering interactive element or avatar canvas
       const target = e.target
-      const isInteractive = target.closest('a, button, input, textarea, canvas, [role="button"]')
+      if (target && target.closest && target.closest('canvas')) {
+        setIsVisible(false)
+        return
+      }
+
+      if (!isVisible) setIsVisible(true)
+      const isInteractive = target && target.closest && target.closest('a, button, input, textarea, [role="button"]')
       setIsHoveringInteractive(!!isInteractive)
     }
 

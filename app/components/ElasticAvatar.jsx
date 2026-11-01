@@ -13,10 +13,10 @@ import { createPlushie } from './plushie'
  * - shock: mouth wide open in "O", eyes wide (tapped / startled)
  */
 const YEASIN_FACES = {
-    smile: '/face/yeasin-smile.png',
-    ouch: '/face/yeasin-ouch.png',
-    dizzy: '/face/yeasin-dizzy.png',
-    shock: '/face/yeasin-shock.png',
+    smile: '/face/yeasin-real.png?v=3',
+    ouch: '/face/yeasin-ouch.png?v=3',
+    dizzy: '/face/yeasin-dizzy.png?v=3',
+    shock: '/face/yeasin-shock.png?v=3',
 }
 
 const REACTIONS = {
@@ -25,6 +25,7 @@ const REACTIONS = {
     pulled: ['ouch', 'shock'],
     tapped: ['shock'],
     dazed: ['dizzy', 'ouch'],
+    fedUp: ['dizzy', 'ouch'],
 }
 
 /**
@@ -83,6 +84,7 @@ const ElasticAvatar = ({
         const container = containerRef.current
         if (!canvas || !container) return
 
+        let isCancelled = false
         let plushInstance = null
         let isGrabbing = false
 
@@ -121,11 +123,19 @@ const ElasticAvatar = ({
             neck: { x: 0.5, y: 0.8 },
         })
             .then((plush) => {
+                if (isCancelled) {
+                    try { plush.destroy() } catch (_) {}
+                    return
+                }
                 plushInstance = plush
                 setIsReady(true)
 
-                plush.on('grab', () => {
+                plush.on('grab', (data) => {
                     isGrabbing = true
+                    if (data && data.clientX !== undefined) {
+                        const rect = container.getBoundingClientRect()
+                        setReticle({ visible: true, x: data.clientX - rect.left, y: data.clientY - rect.top })
+                    }
                 })
 
                 plush.on('release', ({ pulled, cancelled }) => {
@@ -136,8 +146,15 @@ const ElasticAvatar = ({
                     }
                 })
 
-                plush.on('tap', () => {
+                plush.on('tap', (data) => {
                     playBoingSound(0.85)
+                    if (data && data.u !== undefined && data.v !== undefined) {
+                        const pad = 0.22
+                        const x = ((data.u + pad) / (1 + 2 * pad)) * size
+                        const y = ((data.v + pad) / (1 + 2 * pad)) * size
+                        setReticle({ visible: true, x, y })
+                        setTimeout(() => setReticle({ visible: false, x: 0, y: 0 }), 320)
+                    }
                 })
             })
             .catch((err) => {
@@ -145,6 +162,7 @@ const ElasticAvatar = ({
             })
 
         return () => {
+            isCancelled = true
             window.removeEventListener('pointermove', handlePointerMove)
             window.removeEventListener('pointerup', handlePointerUp)
             window.removeEventListener('pointercancel', handlePointerUp)
@@ -154,12 +172,17 @@ const ElasticAvatar = ({
                 } catch (_) {}
             }
         }
-    }, [playBoingSound])
+    }, [playBoingSound, size])
 
     // Geometry matching the WebGL circle frame for the vibrant orange backdrop
     const circleDiameter = Math.round(size * 0.61)
     const circleLeft = Math.round(size * 0.5 - circleDiameter * 0.5)
     const circleTop = Math.round(size * 0.535 - circleDiameter * 0.5)
+
+    // Image coordinate alignment with pad: 0.22
+    const pad = 0.22
+    const imgSize = Math.round(size / (1 + 2 * pad))
+    const imgOffset = Math.round(size * (pad / (1 + 2 * pad)))
 
     return (
         <div
@@ -183,19 +206,18 @@ const ElasticAvatar = ({
             {/* Static high-res placeholder image while WebGL textures prepare */}
             {!isReady && (
                 <Image
-                    src='/face/yeasin-smile.png'
+                    src='/face/yeasin-real.png'
                     alt='Yeasin Munshi'
-                    width={circleDiameter}
-                    height={circleDiameter}
+                    width={imgSize}
+                    height={imgSize}
                     priority
-                    className='absolute pointer-events-none z-10 rounded-full transition-opacity duration-300'
+                    className='absolute pointer-events-none z-10 transition-opacity duration-300'
                     style={{
-                        width: `${circleDiameter}px`,
-                        height: `${circleDiameter}px`,
-                        left: `${circleLeft}px`,
-                        top: `${circleTop}px`,
-                        objectFit: 'cover',
-                        objectPosition: 'center top',
+                        width: `${imgSize}px`,
+                        height: `${imgSize}px`,
+                        left: `${imgOffset}px`,
+                        top: `${imgOffset}px`,
+                        objectFit: 'contain',
                     }}
                 />
             )}
@@ -203,7 +225,7 @@ const ElasticAvatar = ({
             {/* Authentic Elastic Plushie Canvas */}
             <canvas
                 ref={canvasRef}
-                className='relative z-20 touch-none cursor-grab active:cursor-grabbing transition-transform duration-100'
+                className='relative z-20 touch-none cursor-grab active:cursor-grabbing'
                 style={{
                     width: `${size}px`,
                     height: `${size}px`,

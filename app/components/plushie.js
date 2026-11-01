@@ -356,68 +356,56 @@ export async function createPlushie(canvas, options = {}) {
   // halves the memory his faces take. If he's later shown larger (a rotated
   // phone, a zoomed page), they are fetched again at the new size.
   const pixelRatio = () => Math.min(window.devicePixelRatio || 1, 2);
-  const sizeWanted = () => Math.ceil(((canvas.clientWidth / (1 + 2 * opt.pad)) * pixelRatio() * DETAIL) / 64) * 64;
-  let size = sizeWanted(), full = 0; // the size faces are kept at, and the size they come in
+  const sizeWanted = () => {
+    const clientW = canvas.clientWidth || (canvas.getBoundingClientRect && canvas.getBoundingClientRect().width) || parseFloat(canvas.style.width) || 400;
+    return Math.ceil(((clientW / (1 + 2 * opt.pad)) * pixelRatio() * DETAIL) / 64) * 64;
+  };
+  let size = sizeWanted(), full = 0;
   let photo;
+  const textures = {};
+  const names = [];
+  let destroyed = false;
+
   try {
-    photo = await loadImage(opt.faces[resting]);
+    // Load all wanted faces directly with fallback so expressions switch instantly without crashing
+    const loadedList = await Promise.all(
+      wanted.map(async (name) => {
+        try {
+          const img = await loadImage(opt.faces[name]);
+          return [name, img];
+        } catch (err) {
+          console.warn("Failed to load face texture:", name, err);
+          const fallback = await loadImage(opt.faces[resting]);
+          return [name, fallback];
+        }
+      })
+    );
     if (gl.isContextLost()) throw gone();
+
+    photo = loadedList[0][1];
+    full = Math.max(photo.naturalWidth, photo.naturalHeight);
+
+    for (const [name, img] of loadedList) {
+      textures[name] = makeTexture(gl, img, size);
+      names.push(name);
+    }
   } catch (error) {
     canvas.removeEventListener("webglcontextlost", onLost);
     throw gl.isContextLost() ? gone() : error;
   }
-  full = Math.max(photo.naturalWidth, photo.naturalHeight);
-  const textures = { [resting]: makeTexture(gl, photo, size) };
-  const names = [resting];
-  let destroyed = false;
-  let loading = 0; // pictures still on their way
-  // The rest are fetched in the background, two at a time and in the order
-  // they were asked for, and handed over one by one when the page has a
-  // moment to spare and never while he's being held: taking in a picture is
-  // the heaviest thing a phone is asked to do here (tens of milliseconds on
-  // a slow one). One that fails is simply not handed over.
-  const queue = [];
-  let fetching = 0;
-  const spare = () => new Promise((done) => (window.requestIdleCallback ? requestIdleCallback(done, { timeout: 1500 }) : setTimeout(done, 0)));
-  const pause = (ms) => new Promise((done) => setTimeout(done, ms));
-  // Not while a finger is on him or the page has just been touched or
-  // scrolled; but not put off for ever either.
-  // (A face he pulls at being handled waits for a hand to let go only
-  // briefly: it is wanted for that very grab.)
-  const idleHands = async (urgent) => {
-    const since = performance.now(), waited = () => performance.now() - since;
-    const most = urgent ? 600 : 4000; // ms it will wait for quiet (a hand on him: for ever, unless urgent)
-    await Promise.race([spare(), pause(urgent ? 200 : 1500)]);
-    while (!destroyed && (((grab || armed) && !(urgent && waited() > most)) || (performance.now() - lastActive < 350 && waited() < most))) await pause(100);
-  };
-  function later(src, use, { first = false, fit = true, urgent = false, fail = null } = {}) {
-    loading++;
-    queue[first ? "unshift" : "push"]({ src, use, fit, first, urgent, fail });
-    fetchNext();
-  }
-  function fetchNext() {
-    // (One asked for `first` doesn't wait for a place: two slow pictures
-    // mustn't keep his eyes from him.)
-    while (queue.length && !destroyed && (fetching < 2 || queue[0].first)) {
-      const { src, use, fit, urgent, fail } = queue.shift();
-      fetching++;
-      loadImage(src)
-        .then(async (img) => { await idleHands(urgent); if (!destroyed && !gl.isContextLost()) use(makeTexture(gl, img, fit ? size : 0)); }, () => { if (fail) fail(); })
-        .finally(() => { fetching--; loading--; fetchNext(); });
-    }
-  }
-  const keep = (name) => (texture) => {
-    if (textures[name]) gl.deleteTexture(textures[name]); else names.push(name);
-    textures[name] = texture;
-    wake();
-  };
-  const wantedNow = new Set(Object.values(opt.reactions).flat());
-  for (const name of wanted.slice(1)) later(opt.faces[name], keep(name), { urgent: wantedNow.has(name) });
-  // Shown bigger than his pictures were sized for: fetch them again.
+
   function refit() {
     if (destroyed || size >= full || sizeWanted() <= size * 1.1) return;
     size = sizeWanted();
-    for (const name of names) later(opt.faces[name], keep(name));
+    for (const name of names) {
+      loadImage(opt.faces[name]).then((img) => {
+        if (!destroyed && !gl.isContextLost()) {
+          if (textures[name]) gl.deleteTexture(textures[name]);
+          textures[name] = makeTexture(gl, img, size);
+          wake();
+        }
+      });
+    }
   }
   let sheet = null, sheetDue = null; // the eye sheet, and one that's on its way (its address, or a promise of his eyes)
   // Give him eyes (see `gaze` in the options). Callable later, so a page
@@ -616,14 +604,12 @@ export async function createPlushie(canvas, options = {}) {
   // behind him there, it goes through him to that: it gets the hover, the
   // cursor and the click, as if he weren't there. (A finger can't be let
   // through before it lands; its tap is passed on instead, see onClick.)
-  function seeThrough(e, on) {
-    if (e.pointerType === "touch") return;
-    const r = hit.getBoundingClientRect();
-    const onPicture = e.clientX >= r.left && e.clientX < r.right && e.clientY >= r.top && e.clientY < r.bottom;
-    hit.style.pointerEvents = onPicture && !on && !grab && behind(e.clientX, e.clientY) ? "none" : "";
+  function seeThrough() {
+    hit.style.pointerEvents = "";
   }
 
   function onDown(e) {
+    visible = true;
     if (e.button !== undefined && e.button !== 0) return;
     // A second finger means a pinch: the page's, not his.
     if (e.pointerType === "touch" && !e.isPrimary) { letGo(); return; }
@@ -635,7 +621,7 @@ export async function createPlushie(canvas, options = {}) {
     // Allow dragging anywhere on or near the avatar
     const [rx, ry] = restPoint(gx, gy);
     const u = toImage(rx), v = toImage(ry);
-    const within = u >= -0.06 && u <= 1.06 && v >= -0.06 && v <= 1.06;
+    const within = u >= -0.15 && u <= 1.15 && v >= -0.15 && v <= 1.15;
     missed = onHim(gx, gy) || within ? 0 : performance.now();
     if (missed) return;
     if (e.pointerType === "mouse") {
@@ -709,7 +695,7 @@ export async function createPlushie(canvas, options = {}) {
     grabs.push(now);
     showCursor();
     try { hit.setPointerCapture(e.pointerId); } catch {}
-    emit("grab", { touch });
+    emit("grab", { touch, clientX: e.clientX, clientY: e.clientY });
     wake();
   }
 
@@ -1249,7 +1235,9 @@ export async function createPlushie(canvas, options = {}) {
 
   function resize() {
     const dpr = pixelRatio();
-    const w = Math.max(1, Math.round(canvas.clientWidth * dpr)), h = Math.max(1, Math.round(canvas.clientHeight * dpr));
+    const clientW = canvas.clientWidth || (canvas.getBoundingClientRect && canvas.getBoundingClientRect().width) || parseFloat(canvas.style.width) || 400;
+    const clientH = canvas.clientHeight || (canvas.getBoundingClientRect && canvas.getBoundingClientRect().height) || parseFloat(canvas.style.height) || 400;
+    const w = Math.max(1, Math.round(clientW * dpr)), h = Math.max(1, Math.round(clientH * dpr));
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     gl.viewport(0, 0, canvas.width, canvas.height);
     refit();
@@ -1391,7 +1379,7 @@ export async function createPlushie(canvas, options = {}) {
   // in the middle of is dropped, so he never comes back to finish an act the
   // visitor didn't see begin, or still held by a finger that has long gone.
   function attend() {
-    const now = visible && !document.hidden;
+    const now = !document.hidden;
     if (now === up || destroyed) return;
     up = now;
     clearInterval(idleTimer); clearTimeout(blinkTimer); clearTimeout(blinkAgain);
@@ -1411,7 +1399,14 @@ export async function createPlushie(canvas, options = {}) {
     wake();
   }
   // Several changes can arrive at once; the last is how things stand now.
-  const watcher = new IntersectionObserver((entries) => { visible = entries.at(-1).isIntersecting; attend(); });
+  const watcher = new IntersectionObserver((entries) => {
+    if (entries && entries.length) {
+      visible = entries[entries.length - 1].isIntersecting;
+    } else {
+      visible = true;
+    }
+    attend();
+  });
   // The picture itself, not the canvas: its margin is empty.
   watcher.observe(hit);
   document.addEventListener("visibilitychange", attend);

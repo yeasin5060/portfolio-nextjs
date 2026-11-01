@@ -187,7 +187,7 @@ const Header = () => {
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-          className='absolute -top-3 -left-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-cyan-400/40 shadow-lg text-xs font-semibold text-gray-800 dark:text-cyan-300'
+          className='absolute -top-3 -left-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-cyan-400/40 shadow-lg text-xs font-semibold text-gray-800 dark:text-cyan-300 pointer-events-none'
         >
           <span className='w-2 h-2 rounded-full bg-cyan-400 animate-ping' />
           <span>React 19 &bull; Next.js</span>
@@ -197,7 +197,7 @@ const Header = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className='absolute -bottom-2 -right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-emerald-400/40 shadow-lg text-xs font-semibold text-gray-800 dark:text-emerald-300'
+          className='absolute -bottom-2 -right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-emerald-400/40 shadow-lg text-xs font-semibold text-gray-800 dark:text-emerald-300 pointer-events-none'
         >
           <span className='w-2 h-2 rounded-full bg-emerald-400' />
           <span>Node.js &bull; MongoDB</span>
