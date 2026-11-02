@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradClub" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f" />
+      <stop offset="50%" stop-color="#0f2942" />
+      <stop offset="100%" stop-color="#093824" />
+    </linearGradient>
+    <linearGradient id="cardGradClub" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.14)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.03)" />
+    </linearGradient>
+    <linearGradient id="goldGreenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+  </defs>
+
+  <!-- Deep Backdrop -->
+  <rect width="800" height="500" fill="url(#bgGradClub)" />
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="700" cy="90" r="170" fill="#f59e0b" opacity="0.12" filter="blur(60px)" />
+  <circle cx="100" cy="410" r="190" fill="#10b981" opacity="0.14" filter="blur(65px)" />
+  <circle cx="400" cy="250" r="220" fill="#0284c7" opacity="0.08" filter="blur(70px)" />
+
+  <!-- Central UI Card -->
+  <g transform="translate(110, 65)">
+    <rect width="580" height="360" rx="24" fill="url(#cardGradClub)" stroke="rgba(255,255,255,0.20)" stroke-width="1.5" filter="drop-shadow(0 25px 35px rgba(0,0,0,0.6))" />
+    
+    <!-- Browser Top Bar -->
+    <rect width="580" height="48" rx="24" fill="rgba(0,0,0,0.35)" />
+    <circle cx="28" cy="24" r="5.5" fill="#ef4444" />
+    <circle cx="45" cy="24" r="5.5" fill="#f59e0b" />
+    <circle cx="62" cy="24" r="5.5" fill="#10b981" />
+    <rect x="170" y="13" width="240" height="22" rx="11" fill="rgba(255,255,255,0.08)" />
+    <text x="290" y="28" fill="rgba(255,255,255,0.75)" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" text-anchor="middle">bangladesh-china-clup.vercel.app</text>
+
+    <!-- Card Content -->
+    <g transform="translate(40, 75)">
+      <!-- Badge -->
+      <rect x="0" y="0" width="165" height="26" rx="13" fill="rgba(16,185,129,0.18)" stroke="#10b981" stroke-width="1.2" />
+      <circle cx="14" cy="13" r="4" fill="#10b981" />
+      <text x="92" y="17" fill="#34d399" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" letter-spacing="1">CLUB ERP SYSTEM</text>
+
+      <!-- Main Title -->
+      <text x="0" y="62" fill="#ffffff" font-family="system-ui, sans-serif" font-size="30" font-weight="800">Bangladesh-China Club ERP</text>
+      <text x="0" y="88" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13.5" font-weight="500">Member Directory, Facility Booking &amp; Resource Hub</text>
+
+      <!-- Dashboard Grid Mockup -->
+      <g transform="translate(0, 112)">
+        <!-- Stat Tile 1: Members -->
+        <rect x="0" y="0" width="150" height="115" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" />
+        <text x="16" y="28" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">MEMBERS</text>
+        <text x="16" y="62" fill="#ffffff" font-family="system-ui, sans-serif" font-size="24" font-weight="800">1,250+</text>
+        <rect x="16" y="82" width="118" height="6" rx="3" fill="rgba(255,255,255,0.1)" />
+        <rect x="16" y="82" width="95" height="6" rx="3" fill="#10b981" />
+
+        <!-- Stat Tile 2: Bookings -->
+        <rect x="175" y="0" width="150" height="115" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" />
+        <text x="191" y="28" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">FACILITY SLOTS</text>
+        <text x="191" y="62" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="24" font-weight="800">98.2%</text>
+        <rect x="191" y="82" width="118" height="6" rx="3" fill="rgba(255,255,255,0.1)" />
+        <rect x="191" y="82" width="105" height="6" rx="3" fill="#f59e0b" />
+
+        <!-- Stat Tile 3: Events & Chart -->
+        <rect x="350" y="0" width="150" height="115" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" />
+        <text x="366" y="28" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">EVENT REVENUE</text>
+        <polyline points="366,92 390,78 415,85 440,62 468,48 485,55" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="485" cy="55" r="3.5" fill="#34d399" />
+      </g>
+    </g>
+  </g>
+</svg>

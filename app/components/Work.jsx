@@ -17,6 +17,18 @@ import { motion, AnimatePresence } from 'motion/react'
 // Projects list: 4 new projects placed at the beginning as requested
   const projects = [
     {
+      id: 'bangladesh-china-club-erp',
+      title: 'Bangladesh-China Club ERP',
+      category: 'Full Stack',
+      tag: 'Club ERP System',
+      description: 'Comprehensive ERP and club management platform for Bangladesh-China Club featuring member directory, event scheduling, facility booking, billing, and administrative workflows.',
+      bgImage: '/bangladesh-china-club-erp.svg',
+      link: 'https://bangladesh-china-clup.vercel.app/',
+      github: 'https://github.com/yeasin5060',
+      tech: ['Next.js', 'React', 'Node.js', 'MongoDB', 'Tailwind CSS'],
+      featured: true
+    },
+    {
       id: 'nokshiwala',
       title: 'Nokshiwala',
       category: 'Full Stack',

@@ -77,6 +77,12 @@ export const assets = {
 
 export const workData = [
     {
+        title: 'Bangladesh-China Club ERP',
+        description: 'Comprehensive ERP & Club Management Platform',
+        bgImage: '/bangladesh-china-club-erp.svg',
+        link: 'https://bangladesh-china-clup.vercel.app/'
+    },
+    {
         title: 'Nokshiwala',
         description: 'Handcrafted Lifestyle & Artisan Marketplace',
         bgImage: '/nokshiwala.svg',
