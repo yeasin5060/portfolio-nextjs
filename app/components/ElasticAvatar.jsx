@@ -13,10 +13,11 @@ import { createPlushie } from './plushie'
  * - shock: mouth wide open in "O", eyes wide (tapped / startled)
  */
 const YEASIN_FACES = {
-    smile: '/face/yeasin-real.png?v=3',
-    ouch: '/face/yeasin-ouch.png?v=3',
-    dizzy: '/face/yeasin-dizzy.png?v=3',
-    shock: '/face/yeasin-shock.png?v=3',
+    neutral: '/face/yeasin-real.png?v=5',
+    smile: '/face/yeasin-smile.png?v=5',
+    ouch: '/face/yeasin-ouch.png?v=5',
+    dizzy: '/face/yeasin-dizzy.png?v=5',
+    shock: '/face/yeasin-shock.png?v=5',
 }
 
 const REACTIONS = {
